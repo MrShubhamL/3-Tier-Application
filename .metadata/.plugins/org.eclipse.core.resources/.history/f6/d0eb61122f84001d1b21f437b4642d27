@@ -1,0 +1,27 @@
+package com.inn.cafe.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.inn.cafe.model.User;
+import com.inn.cafe.repository.UserRepository;
+import com.inn.cafe.service.UserService;
+
+@Service
+public class UserServiceImpl implements UserService {
+    @Autowired
+	private UserRepository userRepository;
+	@Override
+	public User crateUser(User user) throws Exception {
+		User local = this.userRepository.findByUserEmail(user.getemail());
+		if(local!=null){
+            System.out.println("User is already exist!!");
+            throw new Exception("User already created!!");
+        }
+        else{
+            local = this.userRepository.save(user);
+        }
+        return local;
+	}
+
+}

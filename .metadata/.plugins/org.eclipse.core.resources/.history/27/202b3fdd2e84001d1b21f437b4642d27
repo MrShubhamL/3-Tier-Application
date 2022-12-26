@@ -1,0 +1,113 @@
+package com.inn.cafe.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import lombok.Data;
+
+
+@Data
+@Entity
+@DynamicUpdate
+@DynamicInsert
+@Table(name = "user")
+public class User {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	private String user_name;
+	private String user_email;
+	private String user_contact;
+	private String user_password;
+	private String register_time;
+	private String register_date;
+	private String login_timein;
+	private String login_timeout;
+	private String user_role;
+	public User(int id, String user_name, String user_email, String user_contact, String user_password,
+			String register_time, String register_date, String login_timein, String login_timeout, String user_role) {
+		super();
+		this.id = id;
+		this.user_name = user_name;
+		this.user_email = user_email;
+		this.user_contact = user_contact;
+		this.user_password = user_password;
+		this.register_time = register_time;
+		this.register_date = register_date;
+		this.login_timein = login_timein;
+		this.login_timeout = login_timeout;
+		this.user_role = user_role;
+	}
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUser_name() {
+		return user_name;
+	}
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
+	}
+	public String getUser_email() {
+		return user_email;
+	}
+	public void setUser_email(String user_email) {
+		this.user_email = user_email;
+	}
+	public String getUser_contact() {
+		return user_contact;
+	}
+	public void setUser_contact(String user_contact) {
+		this.user_contact = user_contact;
+	}
+	public String getUser_password() {
+		return user_password;
+	}
+	public void setUser_password(String user_password) {
+		this.user_password = user_password;
+	}
+	public String getRegister_time() {
+		return register_time;
+	}
+	public void setRegister_time(String register_time) {
+		this.register_time = register_time;
+	}
+	public String getRegister_date() {
+		return register_date;
+	}
+	public void setRegister_date(String register_date) {
+		this.register_date = register_date;
+	}
+	public String getLogin_timein() {
+		return login_timein;
+	}
+	public void setLogin_timein(String login_timein) {
+		this.login_timein = login_timein;
+	}
+	public String getLogin_timeout() {
+		return login_timeout;
+	}
+	public void setLogin_timeout(String login_timeout) {
+		this.login_timeout = login_timeout;
+	}
+	public String getUser_role() {
+		return user_role;
+	}
+	public void setUser_role(String user_role) {
+		this.user_role = user_role;
+	}
+	
+	
+}

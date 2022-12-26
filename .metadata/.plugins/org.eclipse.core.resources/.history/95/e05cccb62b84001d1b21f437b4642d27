@@ -1,0 +1,14 @@
+package com.inn.cafe.service.impl;
+
+import com.inn.cafe.model.User;
+import com.inn.cafe.service.UserService;
+
+public class UserServiceImpl implements UserService {
+
+	@Override
+	public User crateUser(User user) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

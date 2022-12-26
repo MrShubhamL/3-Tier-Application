@@ -1,0 +1,85 @@
+package com.inn.cafe.controller;
+
+import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inn.cafe.model.User;
+import com.inn.cafe.service.UserService;
+
+@RestController
+@RequestMapping("/user")
+@CrossOrigin("http://localhost:4200/")
+public class UserController {
+
+    @Autowired
+	private UserService userService;
+	
+    // Craeting user
+    @PostMapping("/")
+    public User createUser(@RequestBody User user) throws Exception {
+        LocalDate date = LocalDate.now();
+        LocalTime.now();
+		LocalTime time = LocalTime.
+        		of(LocalTime.now().getHour(), 
+        				LocalTime.now().getMinute(), 
+        				LocalTime.now().getSecond());
+        user.setRegister_date(date.toString());
+        user.setRegister_time(time.toString());
+        user.setUser_role("NORMAL"); // for calculating normal users
+        user.setLogin_timein("NOT_LOGIN");
+        user.setLogin_timeout("NOT_LOGOUT");
+        return this.userService.crateUser(user);
+
+    }
+    
+    @GetMapping("/{password}/{email}")
+    public User login_user(@PathVariable("password") String password,
+    		@PathVariable("email") String email) throws Exception{
+    	System.out.println(password);
+    	System.out.println(email);
+    	
+    	User login_user = this.userService.login_user(password,email);
+    	if(login_user==null) {
+    		System.out.println("Invalid Username or Password");
+    		throw new Exception("Invalid Username or Password");
+    	}
+    	else {
+    		userService.update_login_time(login_user);
+    		return login_user;
+    	}
+    }
+    
+    @PostMapping("/logout_user")
+    public void logout_user(@RequestBody User user) throws Exception {
+    	userService.update_logout_time(user);
+    }
+    
+    // return the details of current logged user
+    @GetMapping("/current-user")
+    public void getCurrentUser(Principal principal){
+        System.out.println(principal.getName());
+    }
+    
+    @GetMapping("/{email}")
+    public User getUser(@PathVariable("email") String email){
+        return this.userService.getUser(email);
+    }
+    
+    @GetMapping("/allUsers")
+    public Set<User> getAllUsers(){
+    	Set<User> allUsers = userService.getAllUsers();
+    	return allUsers;
+    }
+
+}

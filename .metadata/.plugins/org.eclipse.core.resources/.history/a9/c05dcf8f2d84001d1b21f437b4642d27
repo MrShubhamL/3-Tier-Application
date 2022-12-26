@@ -1,0 +1,46 @@
+package com.inn.cafe.controller;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inn.cafe.model.User;
+import com.inn.cafe.service.UserService;
+
+@RestController
+@RequestMapping("/user")
+@CrossOrigin("*")
+public class UserController {
+
+    @Autowired
+	private UserService userService;
+	
+    // Craeting user
+    @PostMapping("/")
+    public User createUser(@RequestBody User user) throws Exception {
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        user.setUserCreatedDate(date.toString());
+        user.setUserCreatedTime(time.toString());
+        user.setEnabled(true);
+        user.setRoleName("NORMAL"); // for calculating normal users
+        Set<UserRole> userRoleSet = new HashSet<>();
+        Role role = new Role();
+        role.setRoleName("NORMAL");
+        UserRole userRole = new UserRole();
+        userRole.setUser(user);
+        userRole.setRole(role);
+        userRoleSet.add(userRole);
+
+        return this.userService.crateUser(user, userRoleSet);
+
+    }
+
+}

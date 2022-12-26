@@ -1,0 +1,71 @@
+package com.inn.cafe.controller;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inn.cafe.model.User;
+import com.inn.cafe.service.UserService;
+
+@RestController
+@RequestMapping("/user")
+@CrossOrigin("http://localhost:4200/")
+public class UserController {
+
+    @Autowired
+	private UserService userService;
+	
+    // Craeting user
+    @PostMapping("/")
+    public User createUser(@RequestBody User user) throws Exception {
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        user.setRegister_date(date.toString());
+        user.setRegister_time(time.toString());
+        user.setUser_role("NORMAL"); // for calculating normal users
+        user.setLogin_timein("NOT_LOGIN");
+        user.setLogin_timeout("NOT_LOGOUT");
+        return this.userService.crateUser(user);
+
+    }
+    
+    @PostMapping("/login")
+    public User login_user(@RequestBody User user) throws Exception{
+    	System.out.println(user.getpassword());
+    	System.out.println(user.getemail());
+    	User user2 = new User();
+    	user2.setpassword(user.getpassword());
+    	user2.setemail(user.getemail());
+    	User login_user = this.userService.login_user(user);
+    	if(login_user==null) {
+    		System.out.println("Invalid Username or Password");
+    		throw new Exception("Invalid Username or Password");
+    	}
+    	else {
+    		userService.update_login_time(login_user);
+    		return login_user;
+    	}
+    }
+    
+    
+    @GetMapping("/{email}")
+    public User getUser(@PathVariable("email") String email){
+        return this.userService.getUser(email);
+    }
+    
+    @GetMapping("/allUsers")
+    public Set<User> getAllUsers(){
+    	Set<User> allUsers = userService.getAllUsers();
+    	return allUsers;
+    }
+
+}

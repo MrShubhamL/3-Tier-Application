@@ -1,0 +1,16 @@
+package com.inn.cafe.repository;
+
+import java.util.Set;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.inn.cafe.model.User;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+	 public User findByEmail(String email);
+	 
+	 public User findByPasswordAndEmail(String password, String email);
+	 
+	 public Set<User> getUsers();
+
+}
